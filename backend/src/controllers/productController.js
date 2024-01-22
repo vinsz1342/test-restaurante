@@ -9,6 +9,16 @@ exports.getProduct = async (req, res) => {
   }
 };
 
+exports.getProductByRestaurant = async (req, res) => {
+  try {
+    const restaurantId = req.param.restaurant;
+    const products = await Product.find({ restaruant: restaurantId });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: "internal Server Error" });
+  }
+};
+
 exports.getProductByid = async (req, res) => {
   const productId = req.params.id;
   try {
@@ -32,6 +42,7 @@ exports.createProduct = async (req, res) => {
       categoria,
       disponibilidad,
       ingredientes,
+      restaurantId,
     } = req.body;
     const newProduct = await Product.create({
       nombre,
@@ -40,6 +51,7 @@ exports.createProduct = async (req, res) => {
       categoria,
       disponibilidad,
       ingredientes,
+      restaurant: restaurantId,
     });
     res.status(201).json(newProduct);
   } catch (err) {
